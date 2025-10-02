@@ -1,42 +1,44 @@
 <?php
+// Mostrar errores para depuración
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Headers
+// Encabezados HTTP
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
-// Datos de conexión desde Railway
-$host = 'hopper.proxy.rlwy.net';
-$port = '18364';
-$dbname = 'railway';
-$user = 'postgres';
-$password = 'MKlcaeTXlrcHziINORyaZviRvkRPoCkn';
+// Datos de conexión extraídos de tu URL de Railway
+$host = 'interchange.proxy.rlwy.net';
+$port = 30523;
+$user = 'root';
+$password = 'YwqVQxLQTvgyFSVGWWaJNEnEQCKfMUjv';
+$database = 'railway';
 
-// Conexión a PostgreSQL
-$connStr = "host=$host port=$port dbname=$dbname user=$user password=$password";
-$conexion = pg_connect($connStr);
+// Conectar a MySQL
+$conexion = new mysqli($host, $user, $password, $database, $port);
 
-// Verifica conexión
-if (!$conexion) {
-    echo json_encode(["error" => "❌ Error de conexión a la base de datos"]);
+// Verificar conexión
+if ($conexion->connect_error) {
+    echo json_encode(["error" => "❌ Error de conexión: " . $conexion->connect_error]);
     exit;
 }
 
-// Ejecuta consulta
-$resultado = pg_query($conexion, "SELECT id, nombre, telefono FROM contactos");
+// Ejecutar consulta
+$sql = "SELECT id, nombre, telefono FROM contactos";
+$resultado = $conexion->query($sql);
 
+// Verificar errores
 if (!$resultado) {
-    echo json_encode(["error" => "❌ Error al ejecutar la consulta"]);
+    echo json_encode(["error" => "❌ Error en la consulta: " . $conexion->error]);
     exit;
 }
 
-// Formatear respuesta
+// Formar respuesta
 $contactos = [];
-while ($fila = pg_fetch_assoc($resultado)) {
+while ($fila = $resultado->fetch_assoc()) {
     $contactos[] = $fila;
 }
 
+// Devolver JSON
 echo json_encode($contactos);
 ?>
