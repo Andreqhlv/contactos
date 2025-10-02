@@ -3,7 +3,9 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 header("Access-Control-Allow-Origin: *");
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header("Content-Type: application/json; charset=UTF-8");
+header('Content-Type: application/json');
 
 // DATOS DE CONEXIÓN - AJUSTA según tu base
 $host = 'interchange.proxy.rlwy.net';
@@ -29,3 +31,4 @@ while ($fila = $resultado->fetch_assoc()) {
 
 echo json_encode($contactos);
 ?>
+
