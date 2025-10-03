@@ -18,7 +18,7 @@ $database = 'railway';
 $conexion = new mysqli($host, $user, $password, $database, $port);
 
 if ($conexion->connect_error) {
-    echo json_encode(["error" => "❌ Error de conexión: " . $conexion->connect_error]);
+    echo json_encode(["error" => "Error de conexión: " . $conexion->connect_error]);
     exit;
 }
 
@@ -31,4 +31,5 @@ while ($fila = $resultado->fetch_assoc()) {
 
 echo json_encode($contactos);
 ?>
+
 
